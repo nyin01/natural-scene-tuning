@@ -17,9 +17,7 @@ def get_images_paths(directory_name, image_type='png'):
     :param image: (str) either "jpg" or "png"
     :return: a list of queried files and directories
     """
-    # concatnate strings
     end = "/*." + image_type
-
     return glob.glob(glob.escape(directory_name) + end)
 
 
@@ -82,7 +80,7 @@ def store_inputs(from_dir, to_dir, img_size, i):
     # size: desired original img size, output will be twice as wide (concat)
     files = get_images_paths(from_dir)
     for f in files:
-        ext = str(i)+".png"
+        ext = "edge" + str(i) + ".png"
         img = cv2.imread(f)
         # img = pad_resize(img, img_size)
         sketch = image_to_sketch(img)
@@ -101,34 +99,14 @@ def store_inputs(from_dir, to_dir, img_size, i):
 
 
 def generate_data(from_dir, to_dir, img_size):
-    # generate sketches
     os.makedirs(to_dir, exist_ok=True)
-
-    folders = glob.glob(f'{from_dir}/*/')
+    folders = glob.glob(f'{from_dir}/')
     i = 0
     for f in folders:
-        print(f)
         i = store_inputs(f, to_dir, img_size, i)
 
 
-def get_data(input_dir):
-    input_paths = get_images_paths(input_dir)
-    inputs = []
-
-    for f in input_paths:
-        inputs.append(cv2.imread(f))
-
-    inputs = np.array(inputs, dtype='float32')
-
-    return inputs
-
-
-def main():
-    from_dir = "images/original"
-    to_dir = "images/edges"
-    img_size = 64
-    generate_data(from_dir, to_dir, img_size)
-
-
-if __name__ == '__main__':
-    main()
+from_dir = "images/original"
+to_dir = "images/edges"
+img_size = 64
+generate_data(from_dir, to_dir, img_size)

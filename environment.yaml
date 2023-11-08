@@ -1,4 +1,0 @@
-name: natscene-env
-dependencies:
-  - numpy
-  - opencv
